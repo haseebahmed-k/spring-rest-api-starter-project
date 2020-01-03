@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="org.springframework" level="INFO"/>
+
+    <!-- Logstash-Configuration -->
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>192.168.126.128:5000</destination>
+<!--        <destination>${LOGSTASH_URL}:${LOGSTASH_PORT}</destination>-->
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname":"${appName}"}</customFields>
+            <fieldNames>
+                <message>log_message</message>
+            </fieldNames>
+        </encoder>
+        <keepAliveDuration>5 minutes</keepAliveDuration>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="logstash" />
+    </root>
+</configuration>
